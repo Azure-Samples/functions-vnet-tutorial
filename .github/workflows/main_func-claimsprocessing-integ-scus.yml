@@ -33,7 +33,7 @@ jobs:
           popd
 
       - name: 'Run Azure Functions Action'
-        uses: Azure/functions-action@v2
+        uses: Azure/webapps-deploy@v2
         id: fa
         with:
           app-name: 'func-claimsprocessing-integ-scus'
