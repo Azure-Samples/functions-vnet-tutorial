@@ -1,16 +1,21 @@
-using System;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 
-namespace Company.Function
+namespace Company.Function;
+
+public class ServiceBusQueueTrigger
 {
-    public static class ServiceBusQueueTrigger
+    private readonly ILogger<ServiceBusQueueTrigger> _logger;
+
+    public ServiceBusQueueTrigger(ILogger<ServiceBusQueueTrigger> logger)
     {
-        [FunctionName("ServiceBusQueueTrigger")]
-        public static void Run([ServiceBusTrigger("queue", Connection = "SERVICEBUS_CONNECTION")]string myQueueItem, ILogger log)
-        {
-            log.LogInformation($"C# ServiceBus queue trigger function processed message: {myQueueItem}");
-        }
+        _logger = logger;
+    }
+
+    [Function("ServiceBusQueueTrigger")]
+    public void Run(
+        [ServiceBusTrigger("queue", Connection = "SERVICEBUS_CONNECTION")] string myQueueItem)
+    {
+        _logger.LogInformation("C# ServiceBus queue trigger function processed message: {Message}", myQueueItem);
     }
 }
